@@ -1,0 +1,67 @@
+sku,producto,categoria,unidad,precio_clp,peso_kg,perecible,sinonimos
+L001,Arroz grado 2 1 kg,abarrotes,1 kg,1390,1.0,no,arroz
+L002,Fideos spaghetti 400 g,abarrotes,400 g,990,0.4,no,fideos|tallarines|spaghetti|fideos largos
+L003,Fideos corbata 400 g,abarrotes,400 g,990,0.4,no,corbatas|fideos cortos|mostacholes
+L004,Harina sin polvos de hornear 1 kg,abarrotes,1 kg,1290,1.0,no,harina
+L005,Azúcar 1 kg,abarrotes,1 kg,1390,1.0,no,azucar|azúcar
+L006,Sal de mesa 1 kg,abarrotes,1 kg,590,1.0,no,sal
+L007,Aceite vegetal 1 L,abarrotes,1 L,2690,0.95,no,aceite|aceite maravilla
+L008,Lentejas 1 kg,abarrotes,1 kg,2490,1.0,no,lentejas|legumbres
+L009,Porotos 1 kg,abarrotes,1 kg,2990,1.0,no,porotos|frejoles|porotos granados
+L010,Garbanzos 1 kg,abarrotes,1 kg,2790,1.0,no,garbanzos
+L011,Atún lomitos en agua 160 g,abarrotes,160 g,1490,0.17,no,atun|atún|lata de atun
+L012,Jurel en conserva 425 g,abarrotes,425 g,1990,0.43,no,jurel|conserva de jurel|lata de jurel
+L013,Salsa de tomate 200 g,abarrotes,200 g,490,0.2,no,salsa|salsa de tomate|pomarola
+L014,Puré de papas instantáneo 125 g,abarrotes,125 g,1190,0.13,no,pure instantaneo|puré en caja
+L015,Avena 500 g,abarrotes,500 g,1290,0.5,no,avena
+L016,Galletas de agua 210 g,abarrotes,210 g,990,0.21,no,galletas|galletas de agua|galletas soda
+L017,Mermelada 250 g,abarrotes,250 g,1290,0.25,no,mermelada
+L018,Café instantáneo 170 g,abarrotes,170 g,5990,0.2,no,cafe|café|nescafe|cafe en tarro
+L019,Té 100 bolsitas,abarrotes,100 un,2990,0.2,no,te|té|te en bolsa|supremo
+L020,Leche entera UHT 1 L,abarrotes,1 L,1090,1.03,no,leche|leche en caja|leche entera
+L021,Jugo en polvo pack 10 sobres,abarrotes,10 un,2290,0.25,no,jugo|jugo en polvo|zuko
+L022,Sopa en sobre,abarrotes,1 un,690,0.07,no,sopa|sopa en sobre|sopa maggi
+L023,Mayonesa 400 g,abarrotes,400 g,1990,0.4,no,mayo|mayonesa
+L024,Huevos bandeja 30 unidades,abarrotes,30 un,6990,1.8,no,huevos|bandeja de huevos
+L025,Agua purificada bidón 6 L,abarrotes,6 L,1990,6.1,no,agua|bidon de agua|agua embotellada
+L026,Fósforos pack 10 cajas,abarrotes,10 un,990,0.1,no,fosforos|fósforos
+P001,Pan hallulla 1 kg,perecibles,1 kg,2290,1.0,si,pan|hallulla|marraqueta|pan batido
+P002,Pan de molde 600 g,perecibles,600 g,2490,0.6,si,pan de molde|pan molde|ideal
+P003,Carne molida congelada 500 g,perecibles,500 g,3990,0.5,no,carne molida|carne picada
+P004,Trutro de pollo congelado 1 kg,perecibles,1 kg,3490,1.0,no,pollo|trutro|trutro de pollo
+P005,Chuleta de cerdo 1 kg,perecibles,1 kg,5990,1.0,no,chuleta|cerdo|chuletas
+P006,Vienesas 20 unidades,perecibles,20 un,2990,0.9,no,vienesas|salchichas
+P007,Queso gauda laminado 250 g,perecibles,250 g,3290,0.25,si,queso|queso laminado
+P008,Jamón de pavo 250 g,perecibles,250 g,2590,0.25,si,jamon|jamón
+P009,Mantequilla 250 g,perecibles,250 g,2890,0.25,no,mantequilla|margarina
+P010,Papas malla 2 kg,perecibles,2 kg,2490,2.0,no,papas|malla de papas
+P011,Cebolla 1 kg,perecibles,1 kg,1290,1.0,no,cebolla|cebollas
+P012,Tomate 1 kg,perecibles,1 kg,1990,1.0,si,tomate|tomates
+P013,Zanahoria 1 kg,perecibles,1 kg,990,1.0,no,zanahoria|zanahorias
+P014,Manzana 1 kg,perecibles,1 kg,1690,1.0,no,manzana|manzanas|fruta
+P015,Plátano 1 kg,perecibles,1 kg,1490,1.0,si,platano|plátanos|platanos
+P016,Limón 1 kg,perecibles,1 kg,2190,1.0,no,limon|limones
+P017,Lechuga unidad,perecibles,1 un,990,0.4,si,lechuga
+P018,Ajo malla 3 cabezas,perecibles,3 un,990,0.15,no,ajo|ajos
+A001,Cloro tradicional 1 L,aseo,1 L,990,1.05,no,cloro|clorox|cloro gel
+A002,Lavalozas 750 ml,aseo,750 ml,1990,0.8,no,lavalozas|quix|detergente loza
+A003,Detergente líquido para ropa 3 L,aseo,3 L,7990,3.1,no,detergente|detergente ropa|omo|ariel|jabon para ropa
+A004,Limpiador multiuso 900 ml,aseo,900 ml,1790,0.95,no,cif|limpiador|multiuso|poett|limpia pisos
+A005,Esponjas lavaplatos pack 3,aseo,3 un,1290,0.05,no,esponja|esponjas|virutex
+A006,Bolsas de basura 80x110 pack 10,aseo,10 un,1990,0.3,no,bolsas de basura|bolsas negras|bolsas
+A007,Papel higiénico 12 rollos,aseo,12 un,5990,1.2,no,confort|papel higienico|papel higiénico|noble|papel baño
+A008,Toalla de papel 3 rollos,aseo,3 un,2990,0.6,no,nova|toalla nova|toalla de papel|toallas de cocina
+A009,Paños de limpieza pack 5,aseo,5 un,1490,0.1,no,paños|paño|trapos|paños amarillos
+A010,Desinfectante en aerosol 360 ml,aseo,360 ml,3490,0.4,no,lysoform|desinfectante|spray desinfectante
+A011,Escoba,aseo,1 un,3990,0.6,no,escoba|escobillon|escobillón
+A012,Guantes de aseo,aseo,1 par,1490,0.1,no,guantes de aseo|guantes de goma|guantes cocina
+A013,Jabón de manos líquido 500 ml,aseo,500 ml,1690,0.55,no,jabon|jabón|jabon liquido|jabon de manos
+M001,Guantes de trabajo,mantenimiento,1 par,2990,0.2,no,guantes de trabajo|guantes de cuero
+M002,Tierra de hoja 50 L,mantenimiento,50 L,4990,20.0,no,tierra|tierra de hoja|saco de tierra
+M003,Semillas de pasto 1 kg,mantenimiento,1 kg,6990,1.0,no,semillas de pasto|pasto|semilla
+M004,Hilo para desbrozadora 2.4 mm 15 m,mantenimiento,15 m,5990,0.2,no,hilo desbrozadora|nylon orilladora|hilo motoguadaña|tanza
+M005,Pintura látex blanca 1 galón,mantenimiento,1 gl,14990,4.5,no,pintura|latex|látex|pintura blanca
+M006,Brocha 3 pulgadas,mantenimiento,1 un,1990,0.1,no,brocha|pincel
+M007,Ampolleta LED 9W pack 2,mantenimiento,2 un,2990,0.1,no,ampolleta|ampolletas|foco|led
+M008,Pilas AA pack 4,mantenimiento,4 un,3490,0.1,no,pilas|pilas aa|baterias
+M009,Cinta aislante,mantenimiento,1 un,990,0.05,no,cinta aislante|huincha aisladora

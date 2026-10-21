@@ -1,0 +1,28 @@
+# Secretos
+.env
+
+# Entorno y cachés
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Índices vectoriales (se regeneran solos desde data/)
+.indices/
+
+# Datos reales sin anonimizar: NUNCA al repo
+data/raw/*
+!data/raw/.gitkeep
+
+# Correos y adjuntos generados en las demos
+outbox/*
+!outbox/.gitkeep
+
+# Gmail: credenciales OAuth y token (nunca al repo)
+credentials.json
+gmail_token.json
+token.json
+
+# Memoria del agente: checkpoints y memoria de largo plazo (se regeneran)
+.memoria/

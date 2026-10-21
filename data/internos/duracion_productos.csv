@@ -1,0 +1,67 @@
+sku,rendimiento_dias,escala,prioridad,fuente_dato,nota
+L001,9,persona,esencial,supuesto,
+L002,7,persona,esencial,supuesto,
+L003,7,persona,normal,supuesto,
+L004,28,persona,opcional,supuesto,
+L005,20,persona,esencial,observado,"Consumo estimado ~0.7 kg por persona por turno. Observado por Felipe: se piden 5 kg en cada lista, que alcanzan para ~7 turnos de una persona."
+L006,140,centro,esencial,supuesto,Un kilo de sal dura varios meses en un centro.
+L007,20,persona,esencial,supuesto,
+L008,28,persona,esencial,supuesto,
+L009,28,persona,normal,supuesto,
+L010,28,persona,opcional,supuesto,
+L011,3.5,persona,normal,supuesto,
+L012,14,persona,normal,supuesto,
+L013,3.5,persona,normal,supuesto,
+L014,14,persona,opcional,supuesto,
+L015,14,persona,normal,supuesto,
+L016,5,persona,normal,supuesto,
+L017,14,persona,normal,supuesto,
+L018,14,persona,esencial,supuesto,
+L019,45,persona,esencial,supuesto,
+L020,2,persona,esencial,supuesto,
+L021,28,persona,opcional,supuesto,
+L022,3.5,persona,normal,supuesto,
+L023,28,persona,normal,supuesto,
+L024,14,persona,esencial,supuesto,
+L025,3,persona,opcional,supuesto,Solo si el centro no tiene agua potable.
+L026,30,centro,esencial,supuesto,
+P001,5,persona,esencial,supuesto,Perecible: lo que sobra al relevo se pierde.
+P002,7,persona,normal,supuesto,Perecible.
+P003,5,persona,esencial,supuesto,Congelado.
+P004,7,persona,esencial,supuesto,Congelado.
+P005,14,persona,normal,supuesto,Congelado.
+P006,14,persona,normal,supuesto,
+P007,7,persona,normal,supuesto,Perecible.
+P008,7,persona,normal,supuesto,Perecible.
+P009,14,persona,normal,supuesto,
+P010,9,persona,esencial,supuesto,
+P011,14,persona,esencial,supuesto,
+P012,9,persona,normal,supuesto,Perecible.
+P013,28,persona,normal,supuesto,
+P014,9,persona,normal,supuesto,
+P015,9,persona,normal,supuesto,Perecible.
+P016,28,persona,opcional,supuesto,
+P017,7,persona,normal,supuesto,Perecible.
+P018,45,persona,normal,supuesto,
+A001,7,centro,esencial,supuesto,
+A002,14,centro,esencial,supuesto,
+A003,42,persona,esencial,observado,"Observado por Felipe: el detergente para ropa dura varios turnos y aun así se pide en turnos consecutivos. Rendimiento estimado: ~3 turnos por persona."
+A004,21,centro,normal,supuesto,
+A005,14,centro,normal,supuesto,
+A006,7,centro,esencial,supuesto,
+A007,14,persona,esencial,supuesto,
+A008,14,centro,normal,supuesto,
+A009,28,centro,normal,supuesto,
+A010,28,centro,opcional,supuesto,
+A011,180,centro,normal,supuesto,Durable: reponer solo si el turno saliente informa que está dañada.
+A012,28,centro,normal,supuesto,
+A013,21,centro,esencial,supuesto,
+M001,,trabajo,por_solicitud,supuesto,Mantenimiento: se pide con descripción del trabajo.
+M002,,trabajo,por_solicitud,supuesto,Mantenimiento (jardinería).
+M003,,trabajo,por_solicitud,supuesto,Mantenimiento (jardinería).
+M004,,trabajo,por_solicitud,supuesto,Mantenimiento (jardinería).
+M005,,trabajo,por_solicitud,supuesto,Mantenimiento (pintura).
+M006,,trabajo,por_solicitud,supuesto,Mantenimiento (pintura).
+M007,,trabajo,por_solicitud,supuesto,Mantenimiento (eléctrico).
+M008,,trabajo,por_solicitud,supuesto,Mantenimiento.
+M009,,trabajo,por_solicitud,supuesto,Mantenimiento (eléctrico).

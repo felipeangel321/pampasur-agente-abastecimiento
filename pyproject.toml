@@ -1,0 +1,50 @@
+# Agente de abastecimiento Pampasur — proyecto ISY0101 (EP1 + EP2).
+# Uso: uv sync  →  uv run pytest  →  uv run python -m src.grafo --centro tarao --fecha 2026-10-09
+
+[project]
+name = "pampasur-agente-abastecimiento"
+version = "0.1.0"
+description = "Agente de IA que arma y valida las compras de víveres de los centros que atiende Pampasur"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # --- LLM y agentes (Groq, proveedor del curso) ---
+    # create_agent con middleware (aprobación humana, reintentos) y Runtime en los nodos
+    "langchain>=1.4.0",
+    "langchain-groq>=1.1.0",
+    "langgraph>=1.2.0",
+    # --- RAG: embeddings locales + FAISS (Groq no ofrece embeddings) ---
+    "langchain-community>=0.3.0",
+    "langchain-huggingface>=0.1.0",
+    "langchain-text-splitters>=0.3.0",
+    "sentence-transformers>=3.0.0",
+    "faiss-cpu>=1.7.0",
+    # --- Datos y reportes ---
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "fpdf2>=2.7.0",
+    # --- Memoria del agente: checkpoints y memoria vectorial en SQLite ---
+    "langgraph-checkpoint-sqlite>=3.1.2",
+    # --- Correo: API de Gmail con OAuth de escritorio ---
+    "google-api-python-client>=2.201.0",
+    "google-auth-oauthlib>=1.5.0",
+    "google-auth-httplib2>=0.4.4",
+    # --- Utilidades ---
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "llm: llama a Groq (requiere GROQ_API_KEY en .env)",
+]

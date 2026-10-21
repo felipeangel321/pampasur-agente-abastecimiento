@@ -1,0 +1,6 @@
+id,nombre,ubicacion,cuidadores_por_turno,cuidadores_total,traslado,pasaje_bus_ida_clp,km_ida_desde_base,primer_relevo
+maqui,Centro Maqui,Playa Maqui (Frutillar),1,2,vehiculo_prevencionista,0,70,2026-04-02
+chaiquen,Centro Chaiquén,Cochamó,1,2,vehiculo_prevencionista,0,95,2026-04-05
+penasmo,Centro Peñasmo,Colaco,1,2,vehiculo_prevencionista,0,50,2026-04-08
+porcelana,Centro Porcelana,Hornopirén,2,4,bus,9000,0,2026-04-03
+tarao,Centro Tarao,Chiloé,2,4,bus,12000,0,2026-04-10

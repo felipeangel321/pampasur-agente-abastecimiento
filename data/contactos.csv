@@ -1,0 +1,18 @@
+rol,nombre,email,centro
+responsable_compras,Responsable de compras,compras@pampasur.example,
+prevencionista,Prevencionista,prevencion@pampasur.example,
+administracion,Administración,administracion@pampasur.example,
+cuidador,Cuidador Maqui A,cuidador.maqui.a@pampasur.example,maqui
+cuidador,Cuidador Maqui B,cuidador.maqui.b@pampasur.example,maqui
+cuidador,Cuidador Chaiquén A,cuidador.chaiquen.a@pampasur.example,chaiquen
+cuidador,Cuidador Chaiquén B,cuidador.chaiquen.b@pampasur.example,chaiquen
+cuidador,Cuidador Peñasmo A,cuidador.penasmo.a@pampasur.example,penasmo
+cuidador,Cuidador Peñasmo B,cuidador.penasmo.b@pampasur.example,penasmo
+cuidador,Cuidador Porcelana A1,cuidador.porcelana.a1@pampasur.example,porcelana
+cuidador,Cuidador Porcelana A2,cuidador.porcelana.a2@pampasur.example,porcelana
+cuidador,Cuidador Porcelana B1,cuidador.porcelana.b1@pampasur.example,porcelana
+cuidador,Cuidador Porcelana B2,cuidador.porcelana.b2@pampasur.example,porcelana
+cuidador,Cuidador Tarao A1,cuidador.tarao.a1@pampasur.example,tarao
+cuidador,Cuidador Tarao A2,cuidador.tarao.a2@pampasur.example,tarao
+cuidador,Cuidador Tarao B1,cuidador.tarao.b1@pampasur.example,tarao
+cuidador,Cuidador Tarao B2,cuidador.tarao.b2@pampasur.example,tarao
