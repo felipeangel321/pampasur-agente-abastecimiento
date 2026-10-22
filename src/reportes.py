@@ -45,12 +45,13 @@ def orden_excel(orden: dict, fecha: str, carpeta: Path) -> Path:
             ("Centro", orden["nombre_centro"]),
             ("Fecha del relevo", fecha),
             ("Cuidadores por turno", orden["personas"]),
-            ("Presupuesto", orden["presupuesto_clp"]),
+            ("Presupuesto (víveres y aseo)", orden["presupuesto_clp"]),
+            ("Víveres y aseo", orden["viveres_aseo_clp"]),
+            ("Extra de mantenimiento", orden["extra_mantenimiento"]["monto_clp"] if orden["extra_mantenimiento"] else 0),
             ("Total de la orden", orden["total_clp"]),
             ("Total de la lista de WhatsApp", orden["lista_pedida_clp"] or "sin lista"),
             ("Lista copiada del relevo anterior", _copia(orden)),
             ("Compras innecesarias detectadas", orden["exceso_detectado_clp"]),
-            ("Ampliación solicitada", orden["ampliacion"]["monto_clp"] if orden["ampliacion"] else 0),
             ("Peso total (kg)", orden["peso_kg"]),
         ],
         columns=["Dato", "Valor"],
@@ -104,12 +105,13 @@ def reporte_pdf(orden: dict, fecha: str, analisis: str, carpeta: Path) -> Path:
 
     titulo("Resumen")
     filas = [
-        ("Presupuesto del relevo", pesos(orden["presupuesto_clp"])),
+        ("Presupuesto (víveres y aseo)", pesos(orden["presupuesto_clp"])),
+        ("Víveres y aseo", pesos(orden["viveres_aseo_clp"])),
+        ("Extra de mantenimiento", pesos(orden["extra_mantenimiento"]["monto_clp"]) if orden["extra_mantenimiento"] else "no"),
         ("Total de la orden", pesos(orden["total_clp"])),
         ("Lista de WhatsApp", pesos(orden["lista_pedida_clp"]) if orden["lista_pedida_clp"] else "no llegó"),
         ("Lista copiada del relevo anterior", _copia(orden)),
         ("Compras innecesarias evitadas", pesos(orden["exceso_detectado_clp"])),
-        ("Ampliación solicitada", pesos(orden["ampliacion"]["monto_clp"]) if orden["ampliacion"] else "no"),
         ("Peso total", f"{orden['peso_kg']:.1f} kg"),
     ]
     with pdf.table(col_widths=(60, 40), text_align=("LEFT", "RIGHT"), first_row_as_headings=False) as tabla:

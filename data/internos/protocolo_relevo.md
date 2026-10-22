@@ -47,8 +47,8 @@
 
 ## Contactos del proceso
 
-- **Responsable de compras**: compra en Lider y aprueba las ampliaciones de
-  presupuesto.
+- **Responsable de compras**: compra en Lider y aprueba el extra de mantenimiento
+  cuando hay un trabajo que hacer.
 - **Prevencionista**: traslada a los trabajadores de los centros con vehículo y
   entrega sus víveres.
 - **Administración**: recibe el reporte mensual de costos por centro.

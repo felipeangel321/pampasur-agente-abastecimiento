@@ -57,7 +57,7 @@ def test_casos_dudosos_no_se_aceptan_sin_llm(texto):
         ("¿Cuál es el presupuesto por trabajador por turno?", "politica_abastecimiento.md"),
         ("¿Quién lleva los víveres a Hornopirén?", "Porcelana"),
         ("¿Cuántos turnos dura el detergente para ropa?", "duracion_productos.csv > A003"),
-        ("¿Quién aprueba una ampliación de presupuesto?", "Ampliación"),
+        ("¿Quién aprueba el extra de mantenimiento?", "Extra de mantenimiento"),
     ],
 )
 def test_recupera_el_documento_correcto(pregunta, cita_esperada):

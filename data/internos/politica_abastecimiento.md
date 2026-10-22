@@ -15,25 +15,30 @@ cerrados y cuentan con cuidadores que trabajan en turnos de 14 días de trabajo 
 
 ## Presupuesto por turno
 
-- El presupuesto es de **$180.000 por trabajador por turno de 14 días**.
+- El presupuesto es de **$180.000 por trabajador por turno de 14 días** y cubre los
+  víveres y los artículos de aseo.
+- Es un **tope máximo que siempre se respeta**: la compra de víveres y aseo nunca lo
+  supera y no se amplía.
 - Un centro con 1 cuidador por turno (Maqui, Chaiquén, Peñasmo) dispone de
   $180.000 por relevo.
 - Un centro con 2 cuidadores por turno (Porcelana, Tarao) dispone de $360.000 por
   relevo.
 - Los pasajes de bus de los trabajadores **no** se descuentan de este presupuesto:
   se registran como gasto de locomoción.
+- Los materiales de mantenimiento tampoco salen de este presupuesto: se pagan como
+  un extra (ver "Extra de mantenimiento").
 
-## Ampliación de presupuesto
+## Extra de mantenimiento
 
-- Si la compra necesaria supera el presupuesto del relevo, se solicita una
-  ampliación al **Responsable de compras**, que es la misma persona que compra los
-  víveres. Por eso la orden de compra y la solicitud de ampliación van en un solo
-  correo.
-- La solicitud debe indicar el monto que excede, los ítems que lo provocan y el
-  motivo de cada uno (por ejemplo: un trabajo de mantenimiento, un producto que el
-  turno saliente reportó agotado).
-- **(supuesto)** Una ampliación sobre el 20% del presupuesto requiere una
-  justificación más detallada.
+- El mantenimiento es ocasional, cada varios meses: pintar, arreglar algo que se
+  rompió o resolver un problema de luz o de agua. No se pinta todos los meses ni se
+  rompen cosas todos los turnos.
+- Por eso se paga como un **extra**, aparte del presupuesto de víveres y aseo.
+- El extra lo aprueba el **Responsable de compras**, que es la misma persona que
+  compra los víveres. Por eso la orden de compra y la aprobación del extra van en un
+  solo correo.
+- La solicitud indica el monto, los materiales y el trabajo para el que se
+  necesitan.
 
 ## Cómo se arma la lista de compra
 
@@ -57,9 +62,9 @@ cerrados y cuentan con cuidadores que trabajan en turnos de 14 días de trabajo 
 - **Opcional**: productos de gusto personal o que el centro no necesita siempre
   (jugo en polvo, harina, agua embotellada si hay agua potable).
 - **Por solicitud**: materiales de mantenimiento; se piden con la descripción del
-  trabajo a realizar.
-- Si hay que ajustar la compra al presupuesto, se recorta primero lo opcional,
-  después lo normal y nunca lo esencial.
+  trabajo a realizar y se pagan como extra.
+- Si la compra de víveres y aseo no cabe en el presupuesto, se recorta primero lo
+  opcional, después lo normal y nunca lo esencial.
 - **(supuesto)** No se compran bebidas alcohólicas ni cigarrillos con el
   presupuesto de víveres. Solo se compran productos del catálogo autorizado.
 
@@ -79,7 +84,7 @@ cerrados y cuentan con cuidadores que trabajan en turnos de 14 días de trabajo 
 ## Mantenimiento
 
 - Los materiales de mantenimiento (jardinería, pintura, electricidad) se piden por
-  separado, indicando el trabajo para el que se necesitan.
+  separado, indicando el trabajo para el que se necesitan, y se pagan como extra.
 - No se repiten en el turno siguiente salvo que el trabajo continúe; una lista
   copiada que vuelve a pedir pintura o tierra de hoja es una compra innecesaria.
 - Los artículos durables (escoba, guantes de trabajo) se reponen solo si el turno

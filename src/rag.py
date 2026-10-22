@@ -255,11 +255,16 @@ def formatear_contexto(docs: list[Document]) -> str:
     return "\n\n".join(f"[{d.metadata['cita']}]\n{d.page_content}" for d in docs)
 
 
+def normalizar_citas(texto: str) -> str:
+    """gpt-oss a veces cita con 【】 (su formato de entrenamiento); el sistema usa [archivo > sección]."""
+    return texto.replace("【", "[").replace("】", "]")
+
+
 def responder(pregunta: str, k: int = 4) -> dict:
     """Responde una pregunta con los documentos de Pampasur y devuelve las fuentes usadas."""
     docs = buscar_politicas(pregunta, k=k)
     respuesta = (PROMPT_RAG | get_llm()).invoke({"contexto": formatear_contexto(docs), "pregunta": pregunta})
-    return {"respuesta": respuesta.content, "fuentes": list(dict.fromkeys(d.metadata["cita"] for d in docs))}
+    return {"respuesta": normalizar_citas(respuesta.content), "fuentes": list(dict.fromkeys(d.metadata["cita"] for d in docs))}
 
 
 # --- Normalización de listas de WhatsApp ---

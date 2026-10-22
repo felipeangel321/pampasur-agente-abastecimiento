@@ -163,6 +163,7 @@ Qué detecta:
 | `40 rollos de confort` | Lo entiende como 4 paquetes de 12 rollos y lo marca como exceso si en bodega queda papel |
 | `detergente x2`, `azucar 5 kilos` | Exceso: el inventario alcanza o la cantidad dura varios turnos |
 | `2 six de cerveza` | No se compra: está fuera del catálogo autorizado |
+| `pintura x4` | Va como **extra de mantenimiento**, fuera del presupuesto; el correo al Responsable pide aprobarlo |
 | Una lista que suma más que el presupuesto | Alerta **⚠ Sobregasto en la lista** y corrige la orden a lo que el turno necesita |
 | La misma lista del relevo anterior | Alerta **⚠ Lista copiada** |
 

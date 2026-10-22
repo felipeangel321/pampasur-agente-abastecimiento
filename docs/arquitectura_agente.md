@@ -97,7 +97,7 @@ flowchart LR
 | `inventario`, `sku_anteriores` | `preparar` | Necesidad del turno y relevos consecutivos |
 | `recuerdos`, `preferencias` | `preparar` | Memoria de largo plazo recuperada |
 | `lista_pedida`, `lineas_revisar` | `interpretar` | Lista normalizada y líneas fuera del catálogo |
-| `orden` | `comprar` | Ítems, totales, ampliación, carga, decisiones y alertas |
+| `orden` | `comprar` | Ítems, totales, extra de mantenimiento, carga, decisiones y alertas |
 | `analisis` | `analizar` | Texto del Analista (va al PDF y a los correos) |
 | `carpeta`, `correos_requeridos` | `documentos` | Adjuntos y a quién hay que avisar |
 | `correos`, `comentarios_revisor` (acumulativos) | `correos`, `correos_plantilla` | Registro de cada envío o rechazo |
@@ -131,7 +131,7 @@ flowchart LR
 | `revisar_producto` | Analista | `"detergente"`, `"maqui"` | Mantenimiento → "se compra por solicitud" |
 | `historial_producto` | Analista | `"azucar"`, `"tarao"`, `6` | Producto ambiguo → toma el más parecido del catálogo |
 | `buscar_politica` | Analista | Pregunta libre | Devuelve fragmentos con cita; nunca inventa |
-| `recordar_relevos` | Analista | `"tarao"`, `"ampliaciones"` | Sin memoria → lo dice explícitamente |
+| `recordar_relevos` | Analista | `"tarao"`, `"mantenimiento"` | Sin memoria → lo dice explícitamente |
 | `calcular_orden` | Analista | `"penasmo"`, `"2026-10-07"` | Sin inventario → orden con la necesidad completa y alerta |
 | `enviar_correo` | Correos | `para` de `contactos.csv`, adjuntos del relevo | Dirección fuera de `contactos.csv` → rechazado por validación; ruta con carpetas → se usa solo el nombre del archivo |
 
@@ -172,8 +172,9 @@ Prioridades del Comprador, en orden (política de abastecimiento):
 1. Necesidad del turno menos inventario, para esenciales y normales.
 2. De la lista de WhatsApp se agregan solo los opcionales que faltan y el mantenimiento
    nuevo. El mantenimiento repetido del relevo anterior se excluye y se pide confirmar.
-3. Si se supera el presupuesto, se recorta lo opcional. Si aún no alcanza, se pide la
-   ampliación en el mismo correo de la orden. Nunca se recorta lo esencial.
+3. El presupuesto de víveres y aseo es un tope que nunca se supera: si no alcanza, se
+   recorta lo opcional y después lo normal, nunca lo esencial. El mantenimiento es
+   ocasional y va como un extra aparte, que el Responsable aprueba en el correo de la orden.
 4. En centros con bus, lo no esencial más pesado va en envío aparte.
 
 **Detección de lista copiada:** se compara la lista con la compra del relevo anterior del
@@ -192,10 +193,11 @@ pasar copias.
 | Se piden unidades sueltas ("40 rollos de confort") | Se convierten a paquetes del catálogo (4 de 12 rollos) | `test_convierte_unidades_sueltas_a_paquetes` |
 | No llega lista | Se salta `interpretar`; la orden sale del inventario | caso `penasmo` en `scripts/medir.py` |
 | Sin reporte de inventario | Necesidad completa y alerta | `test_sin_inventario_se_compra_la_necesidad_completa_con_alerta` |
-| Compra sobre presupuesto | Recorta opcionales y pide ampliación ítem por ítem | `test_lo_opcional_se_recorta_antes_de_pedir_ampliacion` |
+| Víveres y aseo no caben en el presupuesto | Recorta lo opcional y después lo normal; el tope nunca se supera | `test_el_presupuesto_nunca_se_supera_y_se_recorta_lo_opcional_antes_que_lo_normal` |
+| Se pide material de mantenimiento (pintura) | Va como extra, fuera del presupuesto; se pide aprobarlo en el correo de la orden | `test_el_mantenimiento_va_como_extra_fuera_del_presupuesto` |
 | Mantenimiento repetido | No se compra; se pide confirmar el trabajo | `test_mantenimiento_repetido_de_una_lista_copiada_no_se_compra` |
 | Centro con bus y sobrepeso | Envío aparte de lo no esencial; correo a cuidadores con kg por persona | `test_en_bus_lo_no_esencial_mas_pesado_va_aparte` |
-| Centro con vehículo | Correo al prevencionista en vez de a los cuidadores | `test_correos_segun_traslado_y_ampliacion` |
+| Centro con vehículo | Correo al prevencionista en vez de a los cuidadores | `test_correos_segun_traslado_y_mantenimiento` |
 | Revisor rechaza con comentario | El agente corrige y vuelve a pedir aprobación; el comentario queda en memoria | `test_rechazo_con_comentario_el_agente_corrige_y_se_recuerda` |
 | El agente no llama a la herramienta | Reintento y después plantillas | `test_si_el_agente_no_envia_se_reintenta_y_luego_plan_b` |
 | Sin `GROQ_API_KEY` o cuota agotada | Resumen y correos sin LLM, con aprobación | `test_sin_llm_el_relevo_igual_se_procesa` |

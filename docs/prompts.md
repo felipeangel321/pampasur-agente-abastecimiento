@@ -58,7 +58,7 @@ no en un prompt. El Analista recibe la orden ya calculada y la explica.
 | Rol | Redacta y envía los correos del relevo |
 | Restricciones | Solo los correos de la sección "Correos a enviar", con sus destinatarios y adjuntos; no mezcla los datos de un correo con otro |
 | Formato | Asunto `[Pampasur] <propósito> - <centro> <fecha>`; cuerpo de 6 a 12 líneas con firma |
-| Contenido por destinatario | Responsable: total, compras evitadas y ampliación si hace falta · Cuidadores: kilos por persona en el bus · Prevencionista: centro, fecha y peso |
+| Contenido por destinatario | Responsable: total, compras evitadas y extra de mantenimiento si lo hay · Cuidadores: kilos por persona en el bus · Prevencionista: centro, fecha y peso |
 | Corrección | Si el revisor rechaza con un comentario, corrige y vuelve a enviar; sin comentario, no reenvía |
 | Memoria | Aplica las preferencias del revisor guardadas en relevos anteriores |
 | Entrada | `_tarea_correos` en `src/grafo.py`: datos del relevo, análisis, preferencias y la lista de correos con sus datos |

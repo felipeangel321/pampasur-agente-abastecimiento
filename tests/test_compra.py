@@ -1,5 +1,6 @@
-"""Comprador (determinista): presupuesto, ampliación, carga del bus y a quién se informa."""
+"""Comprador (determinista): presupuesto, extra de mantenimiento, carga del bus y a quién se informa."""
 
+from src import compra
 from src.analisis import inventario_en_relevo
 from src.compra import armar_orden, correos_requeridos, equipo_entrante
 from src.config import DATA_DIR
@@ -40,7 +41,7 @@ def test_avisa_sobregasto_de_la_lista_y_corrige_la_orden():
     assert orden["lista_pedida_clp"] > orden["presupuesto_clp"]
     assert any(a.startswith("Sobregasto") for a in orden["alertas"])
     assert orden["total_clp"] <= orden["presupuesto_clp"]  # la orden sale de la necesidad, no de la lista
-    assert orden["ampliacion"] is None
+    assert orden["extra_mantenimiento"] is None
 
 
 def test_sin_inventario_se_compra_la_necesidad_completa_con_alerta():
@@ -49,21 +50,29 @@ def test_sin_inventario_se_compra_la_necesidad_completa_con_alerta():
     assert any("no reportó inventario" in a for a in orden["alertas"])
 
 
-def test_mantenimiento_que_supera_el_presupuesto_pide_ampliacion():
-    # 8 galones de pintura ($119.920) más la compra del turno superan los $180.000 de Maqui.
+def test_el_mantenimiento_va_como_extra_fuera_del_presupuesto():
+    # 8 galones de pintura ($119.920): un trabajo ocasional que no sale de los $180.000 de víveres y aseo.
     orden = armar_orden("maqui", lista_pedida={"M005": 8})
-    assert orden["total_clp"] > orden["presupuesto_clp"]
-    ampliacion = orden["ampliacion"]
-    assert ampliacion["monto_clp"] == orden["total_clp"] - orden["presupuesto_clp"]
-    assert ampliacion["items"][0]["producto"].startswith("Pintura")  # el mantenimiento la provoca
-    assert ampliacion["justificacion_detallada"] == (ampliacion["porcentaje"] > 20)
+    extra = orden["extra_mantenimiento"]
+    assert extra["monto_clp"] == 8 * 14_990
+    assert extra["items"][0]["producto"].startswith("Pintura")
+    assert orden["viveres_aseo_clp"] <= orden["presupuesto_clp"]
+    assert orden["total_clp"] == orden["viveres_aseo_clp"] + extra["monto_clp"]
+    assert not orden["recortes"]  # el extra no obliga a recortar víveres
 
 
-def test_lo_opcional_se_recorta_antes_de_pedir_ampliacion():
-    orden = armar_orden("maqui", lista_pedida={"M005": 8, "L025": 3})  # L025: agua en bidón, opcional
-    assert "L025" not in _skus(orden)
-    assert any(r["motivo"] == "opcional recortado por presupuesto" for r in orden["recortes"])
+def test_el_presupuesto_nunca_se_supera_y_se_recorta_lo_opcional_antes_que_lo_normal(monkeypatch):
+    # Con un presupuesto bajo, la necesidad completa de Maqui no cabe: se recorta, nunca se amplía.
+    monkeypatch.setattr(compra, "presupuesto_relevo", lambda centro_id: 120_000)
+    orden = armar_orden("maqui", lista_pedida={"L025": 3})  # L025: agua en bidón, opcional
+    assert orden["viveres_aseo_clp"] <= 120_000
+    motivos = [r["motivo"] for r in orden["recortes"]]
+    assert motivos[0] == "opcional recortado por presupuesto"
+    assert "normal recortado por presupuesto" in motivos
     assert all(i["prioridad"] != "opcional" for i in orden["items"])
+    necesidad = armar_orden("maqui")
+    esenciales = {i["sku"] for i in necesidad["items"] if i["prioridad"] == "esencial"}
+    assert esenciales <= _skus(orden)  # lo esencial nunca se recorta
 
 
 def test_mantenimiento_repetido_de_una_lista_copiada_no_se_compra():
@@ -80,7 +89,7 @@ def test_en_bus_lo_no_esencial_mas_pesado_va_aparte():
     assert orden["peso_en_bus_kg"] <= 40 or orden["alertas"]
 
 
-def test_correos_segun_traslado_y_ampliacion():
+def test_correos_segun_traslado_y_mantenimiento():
     bus = correos_requeridos(armar_orden("tarao", inventario_en_relevo("tarao", "2026-10-09")), "2026-10-09")
     assert [r["id"] for r in bus] == ["orden", "carga"]
     equipo = equipo_entrante("tarao", "2026-10-09").lower()
@@ -88,5 +97,5 @@ def test_correos_segun_traslado_y_ampliacion():
 
     vehiculo = correos_requeridos(armar_orden("maqui", lista_pedida={"M005": 8}), "2026-10-15")
     assert [r["id"] for r in vehiculo] == ["orden", "entrega"]
-    assert "ampliación" in vehiculo[0]["proposito"]  # orden y ampliación en un solo correo
+    assert "extra de mantenimiento" in vehiculo[0]["proposito"]  # orden y extra en un solo correo
     assert vehiculo[0]["adjuntos"] == ["orden_compra.xlsx", "reporte_relevo.pdf"]

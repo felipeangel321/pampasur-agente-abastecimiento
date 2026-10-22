@@ -4,7 +4,7 @@
 
 | Fuente | Tipo | Archivo | Para qué se usa |
 |---|---|---|---|
-| Política de abastecimiento | Interna | `data/internos/politica_abastecimiento.md` | Presupuesto, ampliación, prioridades, perecibles |
+| Política de abastecimiento | Interna | `data/internos/politica_abastecimiento.md` | Presupuesto, extra de mantenimiento, prioridades, perecibles |
 | Protocolo de relevo | Interna | `data/internos/protocolo_relevo.md` | Turnos 14x14, traslado en vehículo o bus, carga |
 | Duración de productos | Interna | `data/internos/duracion_productos.csv` | Cuántos días rinde cada producto (detecta sobrecompra) |
 | Centros | Interna | `data/centros.csv` | Ubicación, dotación, presupuesto, traslado |

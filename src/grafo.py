@@ -37,11 +37,11 @@ from langgraph.types import Command, interrupt
 from src import correo, memoria
 from src.agentes import crear_agente_correos, crear_analista
 from src.analisis import inventario_en_relevo, skus_relevo_anterior
-from src.compra import armar_orden, correos_requeridos, pesos
+from src.compra import armar_orden, correos_requeridos, montos, pesos
 from src.config import hay_groq
 from src.datos import cargar_centros
 from src.herramientas import ContextoCorreos, describir_correo
-from src.rag import normalizar_lista
+from src.rag import normalizar_citas, normalizar_lista
 from src.reportes import ORDEN_XLSX, REPORTE_PDF, carpeta_relevo, orden_excel, reporte_pdf
 
 MAX_INTENTOS_CORREO = 2
@@ -88,7 +88,7 @@ def preparar(state: EstadoRelevo, runtime: Runtime) -> dict:
     inventario = inventario_en_relevo(centro, fecha)
     recuerdos, prefs = [], []
     if runtime.store is not None:
-        recuerdos = memoria.recordar(runtime.store, centro, "compras innecesarias, ampliaciones y correos rechazados")
+        recuerdos = memoria.recordar(runtime.store, centro, "compras innecesarias, mantenimiento y correos rechazados")
         prefs = memoria.preferencias(runtime.store, f"correos del relevo de {centro}")
     return {
         "inventario": inventario,
@@ -160,12 +160,10 @@ def registrar(state: EstadoRelevo, runtime: Runtime) -> dict:
     rechazados = [c for c in state.get("correos", []) if c["estado"] == "rechazado"]
     mayores = sorted(orden["observaciones"], key=lambda o: -o["exceso_clp"])[:3]
     texto = (
-        f"Relevo {state['fecha']} de {orden['nombre_centro']}: orden de {pesos(orden['total_clp'])} "
-        f"(presupuesto {pesos(orden['presupuesto_clp'])}). Compras innecesarias evitadas: "
-        f"{pesos(orden['exceso_detectado_clp'])}"
+        f"Relevo {state['fecha']} de {orden['nombre_centro']}: orden de {montos(orden)}. "
+        f"Compras innecesarias evitadas: {pesos(orden['exceso_detectado_clp'])}"
         + (f", sobre todo {', '.join(o['producto'] for o in mayores)}" if mayores else "")
         + ". "
-        + (f"Ampliación solicitada: {pesos(orden['ampliacion']['monto_clp'])}. " if orden["ampliacion"] else "")
         + (f"Alertas: {' '.join(orden['alertas'])} " if orden["alertas"] else "")
         + f"Correos aprobados: {len(listos)}; rechazados: {len(rechazados)}."
         + (f" Comentarios del revisor: {' | '.join(state['comentarios_revisor'])}" if state.get("comentarios_revisor") else "")
@@ -188,8 +186,7 @@ def _datos_orden(state: EstadoRelevo) -> str:
     lineas = [
         f"Relevo del {o['nombre_centro']} (id {o['centro']}) del {state['fecha']}. {o['personas']} cuidador(es), "
         f"traslado en {'bus' if o['traslado'] == 'bus' else 'vehículo del prevencionista'}.",
-        f"Orden calculada: {pesos(o['total_clp'])} de {pesos(o['presupuesto_clp'])} de presupuesto; "
-        f"{len(o['items'])} productos; {o['peso_kg']:.1f} kg en total.",
+        f"Orden calculada: {montos(o)}; {len(o['items'])} productos; {o['peso_kg']:.1f} kg en total.",
     ]
     if o["lista_pedida_clp"]:
         lineas.append(
@@ -204,11 +201,11 @@ def _datos_orden(state: EstadoRelevo) -> str:
             f"{x['recomendada']:g}, exceso {pesos(x['exceso_clp'])} ({x['motivo']})"
             for x in mayores
         ]
-    if a := o["ampliacion"]:
+    if e := o["extra_mantenimiento"]:
         lineas.append(
-            f"Ampliación necesaria: {pesos(a['monto_clp'])} ({a['porcentaje']}% del presupuesto); "
-            f"justificación detallada: {'sí' if a['justificacion_detallada'] else 'no'}. Ítems que la provocan: "
-            + "; ".join(f"{i['producto']} {pesos(i['subtotal_clp'])} ({i['motivo']})" for i in a["items"])
+            f"Extra de mantenimiento: {pesos(e['monto_clp'])}, fuera del presupuesto porque el mantenimiento es "
+            "ocasional; lo aprueba el Responsable de compras. Materiales: "
+            + "; ".join(f"{i['producto']} x{i['cantidad']} {pesos(i['subtotal_clp'])}" for i in e["items"])
         )
     if o["carga_max_kg"] is not None:
         aparte = [i["producto"] for i in o["items"] if i["transporte"] == "envío aparte"]
@@ -232,13 +229,13 @@ def _tarea_analista(state: EstadoRelevo) -> str:
 def _resumen_sin_llm(state: EstadoRelevo) -> str:
     o = state["orden"]
     mayores = sorted(o["observaciones"], key=lambda x: -x["exceso_clp"])[:3]
-    texto = f"La orden suma {pesos(o['total_clp'])} de un presupuesto de {pesos(o['presupuesto_clp'])}."
+    texto = f"La orden suma {montos(o)}."
     if mayores:
         texto += f" Se evitaron {pesos(o['exceso_detectado_clp'])} en compras innecesarias, principalmente: " + "; ".join(
             f"{x['producto']} ({x['motivo']})" for x in mayores
         ) + "."
-    if o["ampliacion"]:
-        texto += f" Se solicita una ampliación de {pesos(o['ampliacion']['monto_clp'])}."
+    if o["extra_mantenimiento"]:
+        texto += " El extra de mantenimiento requiere la aprobación del Responsable de compras."
     return texto + "".join(f" {a}" for a in o["alertas"])
 
 
@@ -257,10 +254,12 @@ def _detalle_correo(req: dict, o: dict) -> str:
         return f"{len(o['items'])} productos, {o['peso_kg']:.1f} kg en total."
     aparte = [i["producto"] for i in o["items"] if i["transporte"] == "envío aparte"]
     return (
-        f"Total {pesos(o['total_clp'])} de {pesos(o['presupuesto_clp'])}; compras innecesarias evitadas "
-        f"{pesos(o['exceso_detectado_clp'])}. Ampliación: "
-        + (f"{pesos(o['ampliacion']['monto_clp'])} ({o['ampliacion']['porcentaje']}%), pedir aprobación."
-           if o["ampliacion"] else "no se necesita, no pidas aprobación de presupuesto.")
+        f"Total {montos(o)}; compras innecesarias evitadas {pesos(o['exceso_detectado_clp'])}. "
+        "Extra de mantenimiento: "
+        + (f"{pesos(o['extra_mantenimiento']['monto_clp'])} por "
+           + ", ".join(f"{i['producto']} x{i['cantidad']}" for i in o["extra_mantenimiento"]["items"])
+           + "; pedir que lo apruebe."
+           if o["extra_mantenimiento"] else "no hay, no pidas ninguna aprobación.")
         + (f" Coordinar el envío aparte de: {', '.join(aparte)}." if aparte else "")
         + (" Las alertas del sistema se agregan solas al final de este correo: no las repitas." if o["alertas"] else "")
     )
@@ -328,15 +327,14 @@ def _plantilla(req: dict, state: EstadoRelevo) -> dict:
     lineas = ["Hola,", ""]
     if req["id"] == "orden":
         lineas.append(
-            f"Adjunto la orden de compra del relevo del {o['nombre_centro']} del {state['fecha']}: "
-            f"{pesos(o['total_clp'])} de un presupuesto de {pesos(o['presupuesto_clp'])}."
+            f"Adjunto la orden de compra del relevo del {o['nombre_centro']} del {state['fecha']}: {montos(o)}."
         )
         if o["exceso_detectado_clp"]:
             lineas.append(f"Se evitaron {pesos(o['exceso_detectado_clp'])} en compras innecesarias de la lista de WhatsApp.")
-        if a := o["ampliacion"]:
+        if e := o["extra_mantenimiento"]:
             lineas.append(
-                f"Se solicita aprobar una ampliación de {pesos(a['monto_clp'])} ({a['porcentaje']}%) por: "
-                + "; ".join(f"{i['producto']} ({i['motivo']})" for i in a["items"]) + ". Responda este correo para aprobarla."
+                f"Se solicita aprobar el extra de mantenimiento de {pesos(e['monto_clp'])} por: "
+                + "; ".join(f"{i['producto']} x{i['cantidad']}" for i in e["items"]) + ". Responda este correo para aprobarlo."
             )
         lineas += [f"Atención: {a}" for a in o["alertas"]]
         lineas.append("El detalle y las observaciones están en los adjuntos.")
@@ -366,7 +364,7 @@ def construir_grafo(llm=None, checkpointer=None, store=None):
             return {"analisis": _resumen_sin_llm(state), "bitacora": ["analizar: sin LLM, resumen determinista."]}
         try:
             resultado = crear_analista(llm).invoke({"messages": [{"role": "user", "content": _tarea_analista(state)}]})
-            texto = (resultado["messages"][-1].content or "").strip()
+            texto = normalizar_citas((resultado["messages"][-1].content or "").strip())
             herramientas = [m.name for m in resultado["messages"] if isinstance(m, ToolMessage)]
         except GraphBubbleUp:
             raise

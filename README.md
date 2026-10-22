@@ -31,6 +31,16 @@ los correos con sus adjuntos después de que una persona los aprueba.
   ([`docs/arquitectura_agente.md`](docs/arquitectura_agente.md))
 - [ ] **EP3:** observabilidad (LangSmith)
 
+### Entrega EP2
+
+| Qué | Dónde |
+|---|---|
+| Informe escrito (4 páginas) | [`docs/informe/Informe_EP2.pdf`](docs/informe/Informe_EP2.pdf) · [Word](docs/informe/Informe_EP2.docx) |
+| Diagrama de orquestación | [Abajo](#agente-ep2) y en [`docs/informe/fig1_orquestacion.png`](docs/informe/fig1_orquestacion.png) |
+| Arquitectura, memoria, herramientas y decisiones | [`docs/arquitectura_agente.md`](docs/arquitectura_agente.md) |
+| Evidencia de pruebas (65 tests) | [`docs/evidencia_pruebas.txt`](docs/evidencia_pruebas.txt) |
+| Guion de la demostración | [`docs/demo.md`](docs/demo.md) |
+
 ## Instalación
 
 Requisitos: [uv](https://docs.astral.sh/uv/) y una API key gratuita de
@@ -55,10 +65,12 @@ Cada relevo pasa por un grafo de LangGraph **sin agente manager**: el orden del 
 está en el código y las rutas dependen de los datos (¿llegó lista? ¿centro con bus?
 ¿se pasa del presupuesto? ¿el revisor rechazó un correo?).
 
+![Diagrama de orquestación del agente](docs/informe/fig1_orquestacion.png)
+
 | Rol | Qué hace | LLM |
 |---|---|---|
 | Intérprete | Convierte la lista de WhatsApp en productos del catálogo (RAG de la EP1) | Solo líneas dudosas |
-| Comprador | Arma la orden: inventario, duración, presupuesto, ampliación y carga del bus; avisa si la lista es copiada o se pasa del presupuesto | No (auditable) |
+| Comprador | Arma la orden: inventario, duración, presupuesto (tope que nunca se pasa), extra de mantenimiento y carga del bus; avisa si la lista es copiada o se pasa del presupuesto | No (auditable) |
 | **Analista** | Explica la orden con la política (citas) y la memoria de relevos anteriores | Sí, 7 herramientas |
 | **Correos** | Redacta y envía por Gmail la orden y los avisos, con Excel y PDF adjuntos | Sí, con aprobación humana |
 
@@ -112,7 +124,8 @@ uv run pytest
 │   ├── prompts.md                # EP1 y EP2: diseño de prompts del RAG y de los agentes
 │   ├── arquitectura_agente.md    # EP2: ADR, grafo, contratos, medición, Gmail
 │   ├── demo.md                   # EP2: guion de la demostración
-│   └── informe/                  # informe escrito de la entrega
+│   ├── evidencia_pruebas.txt     # EP2: salida de uv run pytest -v
+│   └── informe/                  # EP2: informe (PDF y Word) y sus diagramas
 ├── outbox/                       # correos generados y sus adjuntos (ignorado por git)
 ├── scripts/
 │   ├── generar_historial.py      # simulación reproducible (semilla 42)

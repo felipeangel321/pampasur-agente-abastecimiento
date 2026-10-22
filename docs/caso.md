@@ -23,7 +23,7 @@ materiales para trabajos de mantenimiento (jardinería, pintura, electricidad).
 2. La lista llega por **WhatsApp**. Por lo general se **copia y pega la lista del turno
    anterior**, sin revisar lo que queda en bodega.
 3. El **Responsable de compras** compra todo en **Lider**. También es quien aprueba
-   las ampliaciones de presupuesto, así que las excepciones se resuelven rápido.
+   el extra de mantenimiento cuando hay un trabajo que hacer, así que se resuelve rápido.
 4. **Maqui, Chaiquén y Peñasmo:** el prevencionista lleva al trabajador y los víveres
    en vehículo.
 5. **Porcelana y Tarao:** los trabajadores viajan en bus con pasajes que compra
@@ -87,8 +87,8 @@ necesidad del turno (más un 20% de tolerancia), descontando lo que quedaba en b
    necesidad del turno + 20% de tolerancia) a menos del 5% del gasto por relevo.
 2. **Eliminar la copia de listas**: el 100% de las listas se calcula a partir del
    inventario del turno saliente.
-3. **Controlar el presupuesto**: toda compra sobre `cuidadores × $180.000` sale con una
-   solicitud de ampliación justificada ítem por ítem.
+3. **Respetar el presupuesto**: la compra de víveres y aseo nunca supera
+   `cuidadores × $180.000`; el mantenimiento va aparte, como un extra aprobado.
 4. **Reducir el tiempo de preparación de la compra**: de revisar una lista a mano a
    recibir una orden lista en minutos.
 5. **Trazabilidad**: cada compra queda registrada con su inventario, su necesidad
@@ -99,7 +99,7 @@ necesidad del turno (más un 20% de tolerancia), descontando lo que quedaba en b
 | Dato | Estado | Uso en la solución |
 |---|---|---|
 | Centros, dotación y traslado | Real (entregado por la empresa) | Necesidad y presupuesto por relevo |
-| Presupuesto y regla de ampliación | Real | Validación de la compra |
+| Presupuesto (tope) y extra de mantenimiento | Real | Validación de la compra |
 | Duración de productos | Observado (detergente, azúcar) + supuesto (resto) | Detectar compras anticipadas y excesivas |
 | Listas de WhatsApp | Por conseguir (simuladas por ahora) | Entrada del sistema |
 | Catálogo y precios Lider | Simulado con precios referenciales | Cotización y normalización |
@@ -107,8 +107,10 @@ necesidad del turno (más un 20% de tolerancia), descontando lo que quedaba en b
 
 ## Restricciones y requerimientos
 
-- **Presupuesto:** $180.000 por trabajador por turno, ampliable con aprobación del
-  Responsable de compras.
+- **Presupuesto:** $180.000 por trabajador por turno para víveres y aseo. Es un tope
+  que siempre se respeta.
+- **Mantenimiento:** es ocasional (pintura, arreglos, problemas de luz o agua) y se
+  paga como un extra aparte, con aprobación del Responsable de compras.
 - **Lugar de compra:** solo Lider.
 - **Carga por trabajador:** en Porcelana y Tarao la compra tiene que poder llevarse en
   bus (supuesto: 20 kg por trabajador).
@@ -140,6 +142,5 @@ necesidad del turno (más un 20% de tolerancia), descontando lo que quedaba en b
 | Pasaje de bus (ida) | Hornopirén $9.000, Chiloé $12.000 | `centros.csv` |
 | Carga máxima en bus | 20 kg por trabajador | protocolo |
 | Reserva por mal tiempo | 3 días de no perecibles | política |
-| Umbral de ampliación con justificación extendida | 20% | política |
 | Duración de cada producto | Ver columna `fuente_dato` | `duracion_productos.csv` |
 | Precios | Referenciales | `catalogo_lider.csv` |

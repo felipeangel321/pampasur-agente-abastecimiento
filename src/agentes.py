@@ -24,6 +24,7 @@ from langchain.agents.middleware import HumanInTheLoopMiddleware, ModelCallLimit
 from src.config import GROQ_MODEL_TOOLS, get_llm
 from src.herramientas import HERRAMIENTAS_ANALISTA, ContextoCorreos, describir_correo, enviar_correo
 from src.prompts import SISTEMA_ANALISTA, SISTEMA_CORREOS
+from src.rag import normalizar_citas
 
 # Topes por ejecución (contrato de iteraciones, IL2.4): Groq gratuito limita tokens por minuto.
 MAX_LLAMADAS_ANALISTA = 6
@@ -90,7 +91,7 @@ def _chat() -> None:
         except Exception as error:  # 429 de cuota o 400 tool_use_failed de Groq tras los reintentos
             print(f"\n(No pude responder: {type(error).__name__}. Reformula la pregunta o espera un minuto.)\n")
             continue
-        print(f"\nAnalista: {resultado['messages'][-1].content}\n")
+        print(f"\nAnalista: {normalizar_citas(resultado['messages'][-1].content)}\n")
 
 
 if __name__ == "__main__":

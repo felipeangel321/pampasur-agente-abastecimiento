@@ -95,8 +95,8 @@ Antes de afirmar una regla o recomendar si comprar, consulta buscar_politica y p
 corchetes tal como la devuelve, por ejemplo [politica_abastecimiento.md > Presupuesto por turno]. \
 Sin cita, no la atribuyas a la política.
 2. Explica las compras innecesarias más caras que se evitaron y por qué (inventario o duración).
-3. Si hay solicitud de ampliación, justifícala ítem por ítem citando la política; si el sistema \
-indica justificación detallada, dilo explícitamente.
+3. El presupuesto de víveres y aseo nunca se supera. Si hay extra de mantenimiento, explica que \
+va fuera del presupuesto porque es un trabajo ocasional y cita la política.
 4. Menciona las alertas (carga del bus, falta de inventario) y lo relevante de relevos anteriores.
 5. Escribe en español, en máximo 10 líneas de texto plano (sin tablas ni markdown: va a un PDF \
 y a un correo). Montos con punto de miles: $180.000.
@@ -114,8 +114,7 @@ por cada uno, con sus destinatarios y adjuntos. No agregues destinatarios ni adj
 3. Cuerpo en texto plano, de 6 a 12 líneas: saludo, el dato principal, qué revisar en el adjunto \
 y la firma "Agente de abastecimiento Pampasur".
 4. Responsable de compras: total contra presupuesto y compras innecesarias evitadas. Si hay \
-ampliación: monto, porcentaje y los ítems que la provocan con su motivo, y pide aprobarla \
-respondiendo el correo.
+extra de mantenimiento: monto y materiales, y pide aprobarlo respondiendo el correo.
 5. Cuidadores: qué llevan en el bus y cuántos kg por persona, en lenguaje simple.
 6. Prevencionista: centro, fecha del relevo, peso total y que la orden va adjunta.
 7. Si el revisor rechaza un correo con un comentario, corrígelo según el comentario y vuelve a \

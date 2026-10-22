@@ -10,7 +10,7 @@ correos muestren por qué la orden es distinta de la lista que llegó por WhatsA
 
 import pandas as pd
 
-from src.config import CARGA_MAX_KG_POR_PERSONA, DIAS_TURNO, UMBRAL_AMPLIACION_DETALLADA, UMBRAL_LISTA_COPIADA
+from src.config import CARGA_MAX_KG_POR_PERSONA, DIAS_TURNO, UMBRAL_LISTA_COPIADA
 from src.analisis import comparar_con_relevo_anterior, evaluar_lista, lista_recomendada
 from src.datos import cargar_catalogo, cargar_centros, cargar_contactos, presupuesto_relevo
 
@@ -39,6 +39,19 @@ def _total(items: dict[str, dict], campo: str = "subtotal_clp") -> float:
     return sum(i[campo] for i in items.values())
 
 
+def _viveres_aseo(items: dict[str, dict]) -> float:
+    """Lo que cuenta para el presupuesto: todo menos el mantenimiento, que va como extra."""
+    return sum(i["subtotal_clp"] for i in items.values() if i["categoria"] != "mantenimiento")
+
+
+def montos(orden: dict) -> str:
+    """Víveres y aseo contra el presupuesto y, aparte, el extra de mantenimiento si lo hay."""
+    texto = f"{pesos(orden['viveres_aseo_clp'])} de un presupuesto de {pesos(orden['presupuesto_clp'])}"
+    if extra := orden["extra_mantenimiento"]:
+        texto += f", más un extra de mantenimiento de {pesos(extra['monto_clp'])}"
+    return texto
+
+
 def armar_orden(
     centro_id: str,
     inventario: dict[str, float] | None = None,
@@ -53,7 +66,9 @@ def armar_orden(
     2. Lista de WhatsApp, si llegó: se agregan los opcionales que hacen falta y el
        mantenimiento nuevo; el resto de lo pedido de más queda como observación.
        Se avisa si la lista es copia del relevo anterior o si supera el presupuesto.
-    3. Presupuesto: se recorta lo opcional; si aún no alcanza, se pide ampliación.
+    3. Presupuesto de víveres y aseo: es un tope que nunca se supera; se recorta lo
+       opcional y después lo normal, nunca lo esencial. El mantenimiento es ocasional
+       y va aparte, como un extra que aprueba el Responsable de compras.
     4. Carga (solo centros con bus): lo no esencial más pesado va en envío aparte.
     """
     centro = cargar_centros().loc[centro_id]
@@ -80,7 +95,9 @@ def armar_orden(
     copia = None
     if lista_pedida:
         ev = evaluar_lista(centro_id, lista_pedida, inventario, anteriores)
-        total_pedido = int((ev["pedida"] * ev["precio_clp"]).sum())
+        subtotales = ev["pedida"] * ev["precio_clp"]
+        total_pedido = int(subtotales.sum())
+        pedido_viveres_aseo = int(subtotales[ev["categoria"] != "mantenimiento"].sum())
         for f in ev.to_dict("records"):
             sku = f["sku"]
             if f["prioridad"] == "opcional" and f["recomendada"] > 0:
@@ -110,10 +127,10 @@ def armar_orden(
                 f"Se agregan {len(no_pedidos)} productos que no venían en la lista pero el inventario "
                 f"no alcanza para el turno: {', '.join(no_pedidos[:5])}{'…' if len(no_pedidos) > 5 else ''}."
             )
-        if total_pedido > presupuesto:
+        if pedido_viveres_aseo > presupuesto:
             alertas.append(
-                f"Sobregasto en la lista: pedía {pesos(total_pedido)}, sobre el presupuesto de "
-                f"{pesos(presupuesto)}. La orden se corrigió a lo que el turno necesita."
+                f"Sobregasto en la lista: pedía {pesos(pedido_viveres_aseo)} en víveres y aseo, sobre el "
+                f"presupuesto de {pesos(presupuesto)}. La orden se corrigió a lo que el turno necesita."
             )
         comparacion = comparar_con_relevo_anterior(centro_id, fecha, lista_pedida) if fecha else None
         if comparacion and comparacion["porcentaje"] >= 100 * UMBRAL_LISTA_COPIADA:
@@ -125,42 +142,34 @@ def armar_orden(
     else:
         decisiones.append("No llegó lista de WhatsApp: la orden sale solo del inventario y la duración de cada producto.")
 
-    # 3. Presupuesto: primero se recorta lo opcional (nunca lo esencial)
-    if _total(items) > presupuesto:
-        opcionales = sorted(
-            (i for i in items.values() if i["prioridad"] == "opcional"), key=lambda i: -i["subtotal_clp"]
+    # 3. Presupuesto de víveres y aseo: es un tope. Se recorta lo opcional, después lo normal, nunca lo esencial
+    for prioridad in ("opcional", "normal"):
+        candidatos = sorted(
+            (i for i in items.values() if i["prioridad"] == prioridad), key=lambda i: -i["subtotal_clp"]
         )
-        for item in opcionales:
-            if _total(items) <= presupuesto:
+        for item in candidatos:
+            if _viveres_aseo(items) <= presupuesto:
                 break
             del items[item["sku"]]
-            recortes.append({"producto": item["producto"], "cantidad": item["cantidad"], "motivo": "opcional recortado por presupuesto"})
-            decisiones.append(f"Se recorta {item['producto']} (opcional) para acercarse al presupuesto.")
-
-    ampliacion = None
-    total = _total(items)
-    if total > presupuesto:
-        monto = int(total - presupuesto)
-        # Lo que provoca el exceso: mantenimiento primero y después lo normal más caro.
-        candidatos = sorted(
-            (i for i in items.values() if i["prioridad"] in ("por_solicitud", "normal")),
-            key=lambda i: (i["prioridad"] != "por_solicitud", -i["subtotal_clp"]),
+            recortes.append({"producto": item["producto"], "cantidad": item["cantidad"], "motivo": f"{prioridad} recortado por presupuesto"})
+            decisiones.append(f"Se recorta {item['producto']} ({prioridad}) para no pasar el presupuesto.")
+    if _viveres_aseo(items) > presupuesto:
+        alertas.append(
+            f"Lo esencial ya suma {pesos(_viveres_aseo(items))}, sobre el presupuesto de {pesos(presupuesto)}: "
+            "revisar el inventario reportado antes de comprar."
         )
-        provocan, acumulado = [], 0
-        for item in candidatos:
-            if acumulado >= monto:
-                break
-            provocan.append({"producto": item["producto"], "subtotal_clp": item["subtotal_clp"], "motivo": item["motivo"]})
-            acumulado += item["subtotal_clp"]
-        ampliacion = {
-            "monto_clp": monto,
-            "porcentaje": round(100 * monto / presupuesto, 1),
-            "justificacion_detallada": monto / presupuesto > UMBRAL_AMPLIACION_DETALLADA,
-            "items": provocan,
+
+    # El mantenimiento es ocasional (pintura, arreglos, luz o agua): va como extra, fuera del presupuesto
+    mantenimiento = [i for i in items.values() if i["categoria"] == "mantenimiento"]
+    extra = None
+    if mantenimiento:
+        extra = {
+            "monto_clp": int(sum(i["subtotal_clp"] for i in mantenimiento)),
+            "items": [{k: i[k] for k in ("producto", "cantidad", "subtotal_clp")} for i in mantenimiento],
         }
         decisiones.append(
-            f"La compra necesaria supera el presupuesto en {pesos(monto)} ({ampliacion['porcentaje']}%): "
-            "se solicita ampliación al Responsable de compras en el mismo correo de la orden."
+            f"El mantenimiento solicitado ({pesos(extra['monto_clp'])}) va como extra, fuera del presupuesto: "
+            "lo aprueba el Responsable de compras en el mismo correo de la orden."
         )
 
     # 4. Carga en bus: lo no esencial más pesado se manda aparte
@@ -192,7 +201,8 @@ def armar_orden(
         "personas": personas,
         "traslado": centro["traslado"],
         "presupuesto_clp": int(presupuesto),
-        "total_clp": int(total),
+        "viveres_aseo_clp": int(_viveres_aseo(items)),
+        "total_clp": int(_total(items)),
         "peso_kg": round(_total(items, "peso_kg"), 1),
         "carga_max_kg": carga_max,
         "peso_en_bus_kg": round(sum(i["peso_kg"] for i in filas if i["transporte"] == "con el turno"), 1),
@@ -202,7 +212,7 @@ def armar_orden(
         "exceso_detectado_clp": exceso_detectado,
         "observaciones": observaciones,
         "recortes": recortes,
-        "ampliacion": ampliacion,
+        "extra_mantenimiento": extra,
         "alertas": alertas,
         "decisiones": decisiones,
     }
@@ -224,17 +234,17 @@ def _correo_de(rol: str) -> str:
 
 
 def correos_requeridos(orden: dict, fecha) -> list[dict]:
-    """Correos que el relevo necesita, según el traslado del centro y el presupuesto.
+    """Correos que el relevo necesita, según el traslado del centro y el mantenimiento.
 
-    - Siempre: la orden al Responsable de compras (con la ampliación, si hace falta,
-      en el mismo correo, porque es la misma persona que aprueba).
+    - Siempre: la orden al Responsable de compras (con el extra de mantenimiento, si
+      lo hay, en el mismo correo, porque es la misma persona que lo aprueba).
     - Centro con vehículo: aviso de entrega al prevencionista.
     - Centro con bus: a los cuidadores entrantes, qué lleva cada uno.
     """
     centro = orden["centro"]
     proposito = "Orden de compra del relevo"
-    if orden["ampliacion"]:
-        proposito += f" y solicitud de ampliación de presupuesto por {pesos(orden['ampliacion']['monto_clp'])}"
+    if orden["extra_mantenimiento"]:
+        proposito += f" y aprobación del extra de mantenimiento por {pesos(orden['extra_mantenimiento']['monto_clp'])}"
     requeridos = [
         {
             "id": "orden",

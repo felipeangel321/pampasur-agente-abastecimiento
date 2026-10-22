@@ -18,7 +18,6 @@ DIAS_TURNO = 14
 PRESUPUESTO_POR_TRABAJADOR = 180_000
 TOLERANCIA_EXCESO = 1.2  # se acepta comprar hasta un 20% sobre la necesidad
 UMBRAL_CANTIDAD_EXCESIVA = 1.5  # pedir más de 1,5× la necesidad debe justificarse
-UMBRAL_AMPLIACION_DETALLADA = 0.2  # (supuesto) sobre 20% la ampliación se justifica en detalle
 UMBRAL_LISTA_COPIADA = 0.9  # 90% de la lista igual al relevo anterior (calibrado en el historial)
 CARGA_MAX_KG_POR_PERSONA = 20  # (supuesto) lo que lleva cada cuidador en el bus
 

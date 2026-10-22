@@ -1,0 +1,85 @@
+Evidencia de pruebas: uv run pytest -v
+Fecha: 2026-10-21 22:19
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.12, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\Felipe\Desktop\pampasur-agente-abastecimiento\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Felipe\Desktop\pampasur-agente-abastecimiento
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, langsmith-0.14.11
+collecting ... collected 65 items
+
+tests/test_analisis.py::test_detergente_dura_tres_turnos_para_un_cuidador PASSED [  1%]
+tests/test_analisis.py::test_detergente_con_stock_pedido_otra_vez_es_exceso PASSED [  3%]
+tests/test_analisis.py::test_cinco_kilos_de_azucar_es_cantidad_excesiva PASSED [  4%]
+tests/test_analisis.py::test_lista_ajustada_no_tiene_observaciones PASSED [  6%]
+tests/test_analisis.py::test_historial_muestra_el_problema PASSED        [  7%]
+tests/test_compra.py::test_la_orden_sale_del_inventario_y_no_de_la_lista PASSED [  9%]
+tests/test_compra.py::test_detecta_la_lista_copiada_del_relevo_anterior PASSED [ 10%]
+tests/test_compra.py::test_una_lista_armada_de_nuevo_no_se_marca_como_copiada PASSED [ 12%]
+tests/test_compra.py::test_avisa_sobregasto_de_la_lista_y_corrige_la_orden PASSED [ 13%]
+tests/test_compra.py::test_sin_inventario_se_compra_la_necesidad_completa_con_alerta PASSED [ 15%]
+tests/test_compra.py::test_el_mantenimiento_va_como_extra_fuera_del_presupuesto PASSED [ 16%]
+tests/test_compra.py::test_el_presupuesto_nunca_se_supera_y_se_recorta_lo_opcional_antes_que_lo_normal PASSED [ 18%]
+tests/test_compra.py::test_mantenimiento_repetido_de_una_lista_copiada_no_se_compra PASSED [ 20%]
+tests/test_compra.py::test_en_bus_lo_no_esencial_mas_pesado_va_aparte PASSED [ 21%]
+tests/test_compra.py::test_correos_segun_traslado_y_mantenimiento PASSED [ 23%]
+tests/test_correo.py::test_modo_outbox_guarda_el_eml_con_adjunto PASSED  [ 24%]
+tests/test_correo.py::test_rechaza_destinatarios_fuera_de_contactos PASSED [ 26%]
+tests/test_correo.py::test_modo_gmail_redirige_contactos_ficticios PASSED [ 27%]
+tests/test_correo.py::test_modo_gmail_sin_redireccion_no_envia_a_contactos_ficticios PASSED [ 29%]
+tests/test_correo.py::test_reportes_excel_y_pdf PASSED                   [ 30%]
+tests/test_datos.py::test_cinco_centros_y_catorce_cuidadores PASSED      [ 32%]
+tests/test_datos.py::test_presupuesto_por_trabajador PASSED              [ 33%]
+tests/test_datos.py::test_solo_porcelana_y_tarao_viajan_en_bus PASSED    [ 35%]
+tests/test_datos.py::test_todo_producto_del_catalogo_tiene_duracion PASSED [ 36%]
+tests/test_datos.py::test_lista_recomendada_cabe_en_el_presupuesto PASSED [ 38%]
+tests/test_datos.py::test_necesidad_escala_con_cuidadores PASSED         [ 40%]
+tests/test_grafo.py::test_relevo_completo_con_aprobacion PASSED          [ 41%]
+tests/test_grafo.py::test_lista_copiada_llega_al_responsable_aunque_el_modelo_no_la_mencione PASSED [ 43%]
+tests/test_grafo.py::test_rechazo_con_comentario_el_agente_corrige_y_se_recuerda PASSED [ 44%]
+tests/test_grafo.py::test_si_el_agente_no_envia_se_reintenta_y_luego_plan_b PASSED [ 46%]
+tests/test_grafo.py::test_sin_llm_el_relevo_igual_se_procesa PASSED      [ 47%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[confort-A007] PASSED [ 49%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[nescafe-L018] PASSED [ 50%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[toalla nova-A008] PASSED [ 52%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[quix-A002] PASSED [ 53%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[detergente-A003] PASSED [ 55%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[azucar-L005] PASSED [ 56%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[asucar-L005] PASSED [ 58%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[hallulla-P001] PASSED [ 60%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[tallarines-L002] PASSED [ 61%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[pan molde-P002] PASSED [ 63%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[nylon orilladora-M004] PASSED [ 64%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[arroz-L001] PASSED [ 66%]
+tests/test_rag.py::test_jerga_de_whatsapp_llega_al_producto_correcto[cloro-A001] PASSED [ 67%]
+tests/test_rag.py::test_casos_dudosos_no_se_aceptan_sin_llm[cerveza] PASSED [ 69%]
+tests/test_rag.py::test_casos_dudosos_no_se_aceptan_sin_llm[cigarros] PASSED [ 70%]
+tests/test_rag.py::test_casos_dudosos_no_se_aceptan_sin_llm[algo pa lavar la loza] PASSED [ 72%]
+tests/test_rag.py::test_casos_dudosos_no_se_aceptan_sin_llm[papel] PASSED [ 73%]
+tests/test_rag.py::test_recupera_el_documento_correcto[\xbfCu\xe1l es el presupuesto por trabajador por turno?-politica_abastecimiento.md] PASSED [ 75%]
+tests/test_rag.py::test_recupera_el_documento_correcto[\xbfQui\xe9n lleva los v\xedveres a Hornopir\xe9n?-Porcelana] PASSED [ 76%]
+tests/test_rag.py::test_recupera_el_documento_correcto[\xbfCu\xe1ntos turnos dura el detergente para ropa?-duracion_productos.csv > A003] PASSED [ 78%]
+tests/test_rag.py::test_recupera_el_documento_correcto[\xbfQui\xe9n aprueba el extra de mantenimiento?-Extra de mantenimiento] PASSED [ 80%]
+tests/test_rag.py::test_pregunta_compuesta_trae_producto_y_centro PASSED [ 81%]
+tests/test_rag.py::test_reconoce_centro_por_localidad PASSED             [ 83%]
+tests/test_rag.py::test_interpreta_lineas[3 kg pan-pan-3-kg] PASSED      [ 84%]
+tests/test_rag.py::test_interpreta_lineas[cloro x2-cloro-2-None] PASSED  [ 86%]
+tests/test_rag.py::test_interpreta_lineas[- azucar 5 kilos-azucar-5-kilos] PASSED [ 87%]
+tests/test_rag.py::test_interpreta_lineas[papas 4 kg-papas-4-kg] PASSED  [ 89%]
+tests/test_rag.py::test_interpreta_lineas[confort-confort-1-None] PASSED [ 90%]
+tests/test_rag.py::test_normaliza_lista_sin_llm PASSED                   [ 92%]
+tests/test_rag.py::test_convierte_unidades_sueltas_a_paquetes[40 rollos de confort-A007-4] PASSED [ 93%]
+tests/test_rag.py::test_convierte_unidades_sueltas_a_paquetes[confort x2-A007-2] PASSED [ 95%]
+tests/test_rag.py::test_convierte_unidades_sueltas_a_paquetes[200 bolsitas de te-L019-2] PASSED [ 96%]
+tests/test_rag.py::test_respuesta_cita_sus_fuentes PASSED                [ 98%]
+tests/test_rag.py::test_llm_resuelve_descripciones_y_rechaza_no_autorizados PASSED [100%]
+
+============================== warnings summary ===============================
+src\rag.py:23
+  C:\Users\Felipe\Desktop\pampasur-agente-abastecimiento\src\rag.py:23: DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
+    from langchain_community.vectorstores import FAISS
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 65 passed, 1 warning in 45.91s ========================

@@ -21,7 +21,7 @@ from langchain.tools import ToolRuntime, tool
 
 from src import correo
 from src.analisis import inventario_en_relevo, necesidad_turno, turnos_que_cubre
-from src.compra import armar_orden, pesos
+from src.compra import armar_orden, montos, pesos
 from src.datos import cargar_catalogo, cargar_centros, cargar_historial, presupuesto_relevo
 from src.memoria import recordar
 from src.rag import _normalizar, buscar_politicas, buscar_productos, formatear_contexto
@@ -126,8 +126,7 @@ def calcular_orden(centro: str, fecha: str) -> str:
     orden = armar_orden(cid, inventario_en_relevo(cid, fecha))
     productos = ", ".join(f"{i['producto']} x{i['cantidad']}" for i in orden["items"][:12])
     return (
-        f"Total {pesos(orden['total_clp'])} de {pesos(orden['presupuesto_clp'])}; "
-        f"{len(orden['items'])} productos, {orden['peso_kg']:.1f} kg. Principales: {productos}. "
+        f"Total {montos(orden)}; {len(orden['items'])} productos, {orden['peso_kg']:.1f} kg. Principales: {productos}. "
         f"Decisiones: {' '.join(orden['decisiones'])} Alertas: {' '.join(orden['alertas']) or 'ninguna'}"
     )
 
